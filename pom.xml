@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>com.chubaievskyi</groupId>
-    <artifactId>homework7</artifactId>
+    <artifactId>spring-todo-app-lab</artifactId>
     <version>1.0.0</version>
-    <name>homework7</name>
-    <description>homework7</description>
+    <name>spring-todo-app-lab</name>
+    <description>spring-todo-app-lab</description>
     <properties>
         <java.version>17</java.version>
     </properties>
