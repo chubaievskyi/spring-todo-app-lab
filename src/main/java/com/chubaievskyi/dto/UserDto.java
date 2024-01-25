@@ -31,8 +31,6 @@ public class UserDto {
     private String lastName;
 
     @Schema(description = "IPN of the user", example = "1234567899")
-    @NotNull
-    @Pattern(regexp = "\\b\\d{10}\\b", message = "Ipn must consist of 10 digits")
-    @IpnValidation(message = "Ipn failed checksum validation.")
+    @IpnValidation(message = "Ipn must consist of 10 digits and the correct control number.")
     private String ipn;
 }

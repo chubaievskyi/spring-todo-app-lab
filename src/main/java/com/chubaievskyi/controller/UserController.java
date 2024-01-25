@@ -81,7 +81,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Get user by ID", description = "Returns user by id")
+    @Operation(summary = "Get user by ID.", description = "Returns user by id")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200", description = "Success. The user has been returned.",
@@ -98,7 +98,7 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all users", description = "Returns user by id")
+    @Operation(summary = "Get all users.", description = "Returns user by id")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200", description = "Success. The user has been returned.",
