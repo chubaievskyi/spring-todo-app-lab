@@ -21,12 +21,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = {})
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-
 
     @Operation(summary = "Create a user.", description = "Creating and adding a new user to the database.")
     @ApiResponses(value = {
