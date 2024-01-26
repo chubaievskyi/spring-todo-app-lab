@@ -5,6 +5,8 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.Server;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,16 +14,17 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class OpenApiConfig {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class OpenApiConfiguration {
 
     @Value("${project.version}")
-    private String version;
+    String version;
 
     @Value("${open.api.local.server.url}")
-    private String localServer;
+    String localServer;
 
     @Value("${open.api.remote.server.url}")
-    private String remoteServer;
+    String remoteServer;
 
     @Bean
     public OpenAPI customOpenApi() {
