@@ -18,12 +18,13 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(name = "username")
+    private String username;
 
-    @JoinColumn(name = "last_name")
-    private String lastName;
+    @Column(name = "password")
+    private String password;
 
-    @Column(name = "ipn")
-    private String ipn;
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

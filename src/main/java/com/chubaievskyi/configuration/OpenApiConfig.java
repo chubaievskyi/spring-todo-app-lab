@@ -27,6 +27,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenApi() {
 
         return new OpenAPI()
+                .openapi("3.0.0")
                 .info(new Info()
                         .title("Java Dev Tools. Spring. Homework No.2.")
                         .version(version)
