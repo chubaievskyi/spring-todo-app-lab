@@ -1,6 +1,5 @@
 package com.chubaievskyi.dto;
 
-import com.chubaievskyi.validation.IpnValidation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -18,19 +17,17 @@ public class UserDto {
     @Schema(description = "User ID", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
-    @Schema(description = "User first name", example = "Rod")
+    @Schema(description = "Username", example = "Rod")
     @NotNull
-    @Size(min = 2, max = 100, message = "The first name must contain between 2 and 100 characters")
-    @Pattern(regexp = "^[a-zA-Zа-яА-ЯґҐєЄіІїЇ]*$", message = "First name should contain only Ukrainian or English letters.")
-    private String firstName;
+    @Size(min = 2, max = 100, message = "The username must contain between 2 and 100 characters")
+//    @Pattern(regexp = "^[a-zA-Zа-яА-ЯґҐєЄіІїЇ]*$", message = "Username should contain only Ukrainian or English letters.")
+    private String username;
 
-    @Schema(description = "User last name", example = "Johnson")
+    @Schema(description = "User password", example = "123")
     @NotNull
-    @Size(min = 2, max = 100, message = "The last name must contain between 2 and 100 characters")
-    @Pattern(regexp = "^[a-zA-Zа-яА-ЯґҐєЄіІїЇ]*$", message = "Last name should contain only Ukrainian or English letters.")
-    private String lastName;
+    @Size(min = 3, max = 100, message = "The password must contain between 3 and 100 characters")
+    private String password;
 
-    @Schema(description = "IPN of the user", example = "1234567899")
-    @IpnValidation(message = "Ipn must consist of 10 digits and the correct control number.")
-    private String ipn;
+    @Schema(description = "User role", example = "ADMIN")
+    private String role;
 }

@@ -8,5 +8,7 @@ public class SpringApp {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringApp.class, args);
+
+        // TODO: 25.01.2024  Created by: @chubaievskyi - перехват загального ексепшина
     }
 }
