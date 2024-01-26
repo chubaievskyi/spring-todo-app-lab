@@ -1,30 +1,35 @@
 package com.chubaievskyi.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "users")
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "email")
+    String email;
 
     @Column(name = "password")
-    private String password;
+    String password;
+
+    @Column(name = "first_name")
+    String firstName;
+
+    @JoinColumn(name = "last_name")
+    String lastName;
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private Role role;
+    Role role;
 }

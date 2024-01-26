@@ -108,7 +108,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<PageDto<UserDto>> findAllUsers(@RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("username").ascending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("email").ascending());
         Page<UserDto> userDtoPage = userService.findAllUsers(pageable);
         PageDto<UserDto> response = new PageDto<>(userDtoPage.getContent(), page, userDtoPage.getTotalPages());
         return new ResponseEntity<>(response, HttpStatus.OK);
