@@ -22,6 +22,4 @@ public class ErrorResponseDto {
 
     @Schema(description = "Detailed error message", example = "User not found with ID: 22")
     private String message;
-
-
 }

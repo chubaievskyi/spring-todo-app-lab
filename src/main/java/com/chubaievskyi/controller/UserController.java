@@ -1,8 +1,8 @@
 package com.chubaievskyi.controller;
 
+import com.chubaievskyi.dto.ErrorResponseDto;
 import com.chubaievskyi.dto.PageDto;
 import com.chubaievskyi.dto.UserDto;
-import com.chubaievskyi.dto.ErrorResponseDto;
 import com.chubaievskyi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = {})
+@SecurityRequirement(name = "todo-app")
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {

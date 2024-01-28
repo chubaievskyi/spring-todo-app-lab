@@ -1,9 +1,12 @@
 package com.chubaievskyi.configuration;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -48,6 +51,17 @@ public class OpenApiConfiguration {
                                 new Server().url(localServer).description("DEV Server"),
                                 new Server().url(remoteServer).description("PROD Server")
                         )
+                )
+                .addSecurityItem(new SecurityRequirement())
+                .components(
+                        new Components()
+                        .addSecuritySchemes("todo-app",
+                                new SecurityScheme().name("todo-app")
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("basic")
+                                        .in(SecurityScheme.In.HEADER)
+
+                                )
                 );
     }
 }

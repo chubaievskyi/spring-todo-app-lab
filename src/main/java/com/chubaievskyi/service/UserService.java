@@ -10,24 +10,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserService implements UserDetailsService {
+public class UserService {
 
     final UserRepository userRepository;
     final PasswordEncoder passwordEncoder;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserDto createUser(UserDto userDto) {
         UserEntity userEntity = UserMapper.MAPPER.dtoToEntity(userDto);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
@@ -48,6 +45,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(Long id) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
         if (optionalUserEntity.isPresent()) {
@@ -69,16 +67,5 @@ public class UserService implements UserDetailsService {
     public Page<UserDto> findAllUsers(Pageable pageable) {
         Page<UserEntity> userEntityPage = userRepository.findAll(pageable);
         return userEntityPage.map(UserMapper.MAPPER::entityToDto);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .map(userEntity -> new User(
-                        userEntity.getEmail(),
-                        userEntity.getPassword(),
-                        Collections.singleton(userEntity.getRole())
-                ))
-                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + email));
     }
 }
