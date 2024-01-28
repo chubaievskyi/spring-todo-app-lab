@@ -21,5 +21,4 @@ public class PageDto<T> {
 
     @Schema(description = "Total number of pages", example = "5")
     private int totalPages;
-
 }

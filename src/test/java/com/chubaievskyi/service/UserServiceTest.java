@@ -1,6 +1,7 @@
 package com.chubaievskyi.service;
 
 import com.chubaievskyi.dto.UserDto;
+import com.chubaievskyi.entity.Role;
 import com.chubaievskyi.entity.UserEntity;
 import com.chubaievskyi.exception.UserNotFoundException;
 import com.chubaievskyi.mapper.UserMapper;
@@ -14,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +30,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @Mock
     private UserMapper userMapper;
@@ -46,21 +51,25 @@ class UserServiceTest {
 
     @BeforeEach
     void SetUp() {
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository, passwordEncoder);
         userId = 1L;
 
         userDto = new UserDto(
                 1L,
+                "First@gmail.com",
+                "123",
                 "First",
                 "Test",
-                "1234567899"
+                "USER"
         );
 
         userEntity = new UserEntity(
                 1L,
+                "First@gmail.com",
+                "123",
                 "First",
                 "Test",
-                "1234567899"
+                Role.USER
         );
     }
 
