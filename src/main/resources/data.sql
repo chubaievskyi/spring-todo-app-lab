@@ -9,3 +9,9 @@ VALUES ('user1@gmail.com', '123', 'User1', 'User1','USER'),
        ('user8@gmail.com', '123', 'User8', 'User8','USER'),
        ('user9@gmail.com', '123', 'User9', 'User9','USER'),
        ('chubaievskyi@gmail.com', '123','Pavlo', 'Chubaievskyi', 'ADMIN');
+
+
+INSERT INTO tasks (name, owner_id, description, deadline)
+VALUES ('task1', 1, 'some description1', '2023-02-20'),
+       ('task2', 2, 'some description2', '2023-02-20'),
+       ('task3', 3, 'some description3', '2023-02-20');
