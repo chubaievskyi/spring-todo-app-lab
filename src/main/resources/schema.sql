@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS tasks;
 
 CREATE TABLE IF NOT EXISTS users
 (
@@ -8,4 +9,15 @@ CREATE TABLE IF NOT EXISTS users
     first_name VARCHAR(128) NOT NULL,
     last_name VARCHAR(128) NOT NULL,
     role  VARCHAR(128) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tasks
+(
+    id         SERIAL PRIMARY KEY,
+    created TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP(0),
+    name VARCHAR(128) NOT NULL,
+    description VARCHAR(128) NOT NULL,
+    owner_id INT REFERENCES users (id) ON DELETE CASCADE,
+    deadline DATE NOT NULL,
+    status  VARCHAR(128) DEFAULT 'NEW'
 );

@@ -100,10 +100,10 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all users.", description = "Returns user by id")
+    @Operation(summary = "Get all users.", description = "Returns all users")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200", description = "Success. The user has been returned.",
+                    responseCode = "200", description = "Success. The users has been returned.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = PageDto.class))),
     })
