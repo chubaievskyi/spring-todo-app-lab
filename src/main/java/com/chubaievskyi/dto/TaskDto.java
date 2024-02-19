@@ -1,15 +1,17 @@
 package com.chubaievskyi.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Schema(description = "Task DTO")
 @Data
@@ -22,7 +24,10 @@ public class TaskDto {
     Long id;
 
     @Schema(description = "Created at", example = "2024-02-18 16:52:43", accessMode = Schema.AccessMode.READ_ONLY)
-    String created;
+    String createdAt;
+
+    @Schema(description = "Created by", example = "chubaievskyi@gmail.com", accessMode = Schema.AccessMode.READ_ONLY)
+    String createdBy;
 
     @Schema(description = "Task name", example = "Task 1")
     @NotBlank
@@ -35,14 +40,13 @@ public class TaskDto {
     String description;
 
     @Schema(description = "User name", example = "Rod@gmail.com")
-    @NotBlank
-    @Size(min = 2, max = 100, message = "The user name must contain between 2 and 100 characters")
-    @Pattern(regexp = "^[a-zA-Zа-яА-ЯґҐєЄіІїЇ]*$", message = "User name should contain only Ukrainian or English letters.")
+    @Email
     String owner;
 
     @Schema(description = "Deadline", example = "2024-02-29")
-    @NotBlank
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
+//    @JsonFormat(pattern = "yyyy-MM-dd")
     String deadline;
 
     @Schema(description = "Task status", example = "NEW", accessMode = Schema.AccessMode.READ_ONLY)

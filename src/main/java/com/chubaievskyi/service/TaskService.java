@@ -2,6 +2,7 @@ package com.chubaievskyi.service;
 
 import com.chubaievskyi.dto.TaskDto;
 import com.chubaievskyi.dto.UserDto;
+import com.chubaievskyi.entity.Status;
 import com.chubaievskyi.entity.TaskEntity;
 import com.chubaievskyi.entity.UserEntity;
 import com.chubaievskyi.exception.TaskNotFoundException;
@@ -13,8 +14,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -26,6 +32,13 @@ public class TaskService {
     final UserService userService;
 
     public TaskDto createTask(TaskDto taskDto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        taskDto.setCreatedBy(username);
+//        taskDto.setCreatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//        taskDto.setStatus(String.valueOf(Status.NEW));
+        UserDto userDto = userService.findUserByEmail(taskDto.getOwner());
+        taskDto.setOwner(String.valueOf(userDto.getId()));
+
         TaskEntity taskEntity = TaskMapper.MAPPER.dtoToEntity(taskDto);
         TaskEntity savedTask = taskRepository.save(taskEntity);
         return TaskMapper.MAPPER.entityToDto(savedTask);

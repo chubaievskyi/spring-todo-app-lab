@@ -64,6 +64,15 @@ public class UserService {
         }
     }
 
+    public UserDto findUserByEmail(String email) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
+        if (optionalUserEntity.isPresent()) {
+            return UserMapper.MAPPER.entityToDto(optionalUserEntity.get());
+        } else {
+            throw new UserNotFoundException(email);
+        }
+    }
+
     public Page<UserDto> findAllUsers(Pageable pageable) {
         Page<UserEntity> userEntityPage = userRepository.findAll(pageable);
         return userEntityPage.map(UserMapper.MAPPER::entityToDto);
