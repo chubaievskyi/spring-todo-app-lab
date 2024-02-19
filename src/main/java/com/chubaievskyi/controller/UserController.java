@@ -100,6 +100,23 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get user by email.", description = "Returns user by email")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "Success. The user has been returned.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserDto.class))),
+            @ApiResponse(
+                    responseCode = "404", description = "User not found",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @GetMapping("/by-email/{email}")
+    public ResponseEntity<UserDto> findUserByEmail(@Parameter(description = "User email") @PathVariable String email) {
+        UserDto userDto = userService.findUserByEmail(email);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
     @Operation(summary = "Get all users.", description = "Returns all users")
     @ApiResponses(value = {
             @ApiResponse(

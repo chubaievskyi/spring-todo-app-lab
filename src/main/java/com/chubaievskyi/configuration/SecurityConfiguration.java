@@ -25,9 +25,9 @@ public class SecurityConfiguration {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(urlConfig -> urlConfig
                                 .requestMatchers("/swagger", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/users").hasAnyAuthority(ROLE_ADMIN)
-                                .requestMatchers(HttpMethod.DELETE, "/users/**").hasAnyAuthority(ROLE_ADMIN)
-                                .requestMatchers("/users/**").hasAnyAuthority(ROLE_ADMIN, ROLE_USER)
+                                .requestMatchers(HttpMethod.POST, "/users", "/tasks").hasAnyAuthority(ROLE_ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, "/users/**", "/tasks/**").hasAnyAuthority(ROLE_ADMIN)
+                                .requestMatchers("/users/**", "/tasks/**").hasAnyAuthority(ROLE_ADMIN, ROLE_USER)
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling

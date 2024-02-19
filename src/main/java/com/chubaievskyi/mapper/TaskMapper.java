@@ -11,10 +11,13 @@ public interface TaskMapper {
 
     TaskMapper MAPPER = Mappers.getMapper(TaskMapper.class);
 
-//    @Mapping(target = "id", source = "id")
-    @Mapping(target = "owner", source = "owner", ignore = true)
+    //    @Mapping(target = "id", source = "id")
+    @Mapping(target = "createdAt", source = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", source = "createdBy", ignore = true)
     TaskDto entityToDto(TaskEntity taskEntity);
 
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
     TaskEntity dtoToEntity(TaskDto taskDto);
 
 }
