@@ -34,11 +34,10 @@ public class TaskService {
     public TaskDto createTask(TaskDto taskDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         taskDto.setCreatedBy(username);
-//        taskDto.setCreatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-//        taskDto.setStatus(String.valueOf(Status.NEW));
+        taskDto.setCreatedAt(LocalDateTime.now());
         UserDto userDto = userService.findUserByEmail(taskDto.getOwner());
         taskDto.setOwner(String.valueOf(userDto.getId()));
-
+        taskDto.setStatus(String.valueOf(Status.NEW));
         TaskEntity taskEntity = TaskMapper.MAPPER.dtoToEntity(taskDto);
         TaskEntity savedTask = taskRepository.save(taskEntity);
         return TaskMapper.MAPPER.entityToDto(savedTask);
@@ -70,7 +69,7 @@ public class TaskService {
         if (optionalTaskEntity.isPresent()) {
             UserDto userDto = userService.findUserById(optionalTaskEntity.get().getOwner());
             TaskDto taskDto = TaskMapper.MAPPER.entityToDto(optionalTaskEntity.get());
-            taskDto.setOwner(userDto.getEmail());
+//            taskDto.setOwner(userDto.getEmail());
             return TaskMapper.MAPPER.entityToDto(optionalTaskEntity.get());
         } else {
             throw new TaskNotFoundException(id);

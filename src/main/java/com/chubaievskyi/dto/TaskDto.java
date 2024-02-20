@@ -24,7 +24,10 @@ public class TaskDto {
     Long id;
 
     @Schema(description = "Created at", example = "2024-02-18 16:52:43", accessMode = Schema.AccessMode.READ_ONLY)
-    String createdAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    String createdAt;
+    LocalDateTime createdAt;
 
     @Schema(description = "Created by", example = "chubaievskyi@gmail.com", accessMode = Schema.AccessMode.READ_ONLY)
     String createdBy;
@@ -48,6 +51,7 @@ public class TaskDto {
     @NotNull
 //    @JsonFormat(pattern = "yyyy-MM-dd")
     String deadline;
+//    LocalDate deadline;
 
     @Schema(description = "Task status", example = "NEW", accessMode = Schema.AccessMode.READ_ONLY)
     String status;

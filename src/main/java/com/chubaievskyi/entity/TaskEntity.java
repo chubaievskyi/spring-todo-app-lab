@@ -3,6 +3,7 @@ package com.chubaievskyi.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -21,8 +22,12 @@ public class TaskEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+//    @Column(name = "created_at")
+//    String createdAt;
+
     @Column(name = "created_at")
-    String createdAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    LocalDateTime createdAt;
 
     @Column(name = "created_by")
     String createdBy;
@@ -33,7 +38,7 @@ public class TaskEntity {
     @Column(name = "description")
     String description;
 
-    @JoinColumn(name = "owner_id")
+    @Column(name = "owner_id")
     Long owner;
 
     @Column(name = "deadline")
