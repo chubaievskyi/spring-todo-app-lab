@@ -2,7 +2,10 @@ package com.chubaievskyi.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Schema(description = "Task DTO")
@@ -26,7 +28,6 @@ public class TaskDto {
     @Schema(description = "Created at", example = "2024-02-18 16:52:43", accessMode = Schema.AccessMode.READ_ONLY)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    String createdAt;
     LocalDateTime createdAt;
 
     @Schema(description = "Created by", example = "chubaievskyi@gmail.com", accessMode = Schema.AccessMode.READ_ONLY)
@@ -49,9 +50,7 @@ public class TaskDto {
     @Schema(description = "Deadline", example = "2024-02-29")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull
-//    @JsonFormat(pattern = "yyyy-MM-dd")
     String deadline;
-//    LocalDate deadline;
 
     @Schema(description = "Task status", example = "NEW", accessMode = Schema.AccessMode.READ_ONLY)
     String status;
