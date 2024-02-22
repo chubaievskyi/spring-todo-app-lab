@@ -11,7 +11,7 @@ VALUES ('user1@gmail.com', '123', 'User1', 'User1','USER'),
        ('chubaievskyi@gmail.com', '$2a$12$vU7CZFhEkeUPOAbYcFhatOYr0lzYRfYMR7AEfP9A7VgFK09KvbkRy','Pavlo', 'Chubaievskyi', 'ADMIN');
 
 
-INSERT INTO tasks (created_at, created_by, name, owner_id, description, deadline)
-VALUES ('2024-02-20 21:57', 'chubaievskyi@gmail.com', 'task1', 1, 'some description1', '2023-02-20'),
-       ('2024-02-20 21:57', 'chubaievskyi@gmail.com', 'task2', 2, 'some description2', '2023-02-20'),
-       ('2024-02-20 21:57', 'Rod@gmail.com', 'task3', 3, 'some description3', '2023-02-20');
+INSERT INTO tasks (created_at, created_by, name, owner, description, deadline)
+VALUES ('2024-02-20 21:57', 'chubaievskyi@gmail.com', 'task1', 'user1@gmail.com', 'some description1', '2023-02-20'),
+       ('2024-02-20 21:57', 'chubaievskyi@gmail.com', 'task2', 'user2@gmail.com', 'some description2', '2023-02-20'),
+       ('2024-02-20 21:57', 'user1@gmail.com', 'task3', 'user3@gmail.com', 'some description3', '2023-02-20');

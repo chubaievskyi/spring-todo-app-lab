@@ -30,7 +30,7 @@ public class TaskDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdAt;
 
-    @Schema(description = "Created by", example = "chubaievskyi@gmail.com", accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Created by", example = "user1@gmail.com", accessMode = Schema.AccessMode.READ_ONLY)
     String createdBy;
 
     @Schema(description = "Task name", example = "Task 1")
@@ -43,7 +43,7 @@ public class TaskDto {
     @Size(min = 3, max = 100, message = "The description must contain between 3 and 100 characters")
     String description;
 
-    @Schema(description = "User name", example = "Rod@gmail.com")
+    @Schema(description = "User name", example = "user1@gmail.com")
     @Email
     String owner;
 

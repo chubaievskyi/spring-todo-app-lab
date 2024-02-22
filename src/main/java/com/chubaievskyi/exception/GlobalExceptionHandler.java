@@ -16,14 +16,15 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = UserNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleUserNotFoundException(UserNotFoundException e) {
+    @ExceptionHandler(value = {UserNotFoundException.class, TaskNotFoundException.class})
+    public ResponseEntity<ErrorResponseDto> handleNotFoundException(RuntimeException e) {
+        String message = e instanceof UserNotFoundException ? "User not found" : "Task not found";
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")),
                 HttpStatus.NOT_FOUND.value(),
                 "Not found",
-                e.getMessage());
+                message);
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }

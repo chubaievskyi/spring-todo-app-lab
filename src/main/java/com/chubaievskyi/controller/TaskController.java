@@ -3,6 +3,7 @@ package com.chubaievskyi.controller;
 import com.chubaievskyi.dto.ErrorResponseDto;
 import com.chubaievskyi.dto.PageDto;
 import com.chubaievskyi.dto.TaskDto;
+import com.chubaievskyi.entity.Status;
 import com.chubaievskyi.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,7 +40,7 @@ public class TaskController {
             @ApiResponse(
                     responseCode = "400", description = "Invalid data entered.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDto.class)))   ///////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping
     public ResponseEntity<TaskDto> createTask(@Valid @RequestBody TaskDto taskDto) {
@@ -57,11 +58,11 @@ public class TaskController {
             @ApiResponse(
                     responseCode = "400", description = "Invalid data entered.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDto.class))),   ///?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(
                     responseCode = "404", description = "Task not found.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDto.class)))    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PutMapping("/{id}")
     public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto) {
@@ -69,23 +70,23 @@ public class TaskController {
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
 
-    @Operation(summary = "Update task by ID.", description = "Update task data.")
+    @Operation(summary = "Update task status by ID.", description = "Update task status.")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "204", description = "Task successfully updated.",
+                    responseCode = "204", description = "Task status successfully updated.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = TaskDto.class))),
             @ApiResponse(
                     responseCode = "400", description = "Invalid data entered.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDto.class))),   ///?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(
                     responseCode = "404", description = "Task not found.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDto.class)))    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @PutMapping("/{id}")
-    public ResponseEntity<TaskDto> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody String status) { ////!!!!!!!!!!!!!!
+    @PutMapping("/status/{id}")
+    public ResponseEntity<TaskDto> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody Status status) {
         TaskDto updatedTaskStatus = taskService.updateTaskStatus(id, status);
         return new ResponseEntity<>(updatedTaskStatus, HttpStatus.OK);
     }
@@ -96,7 +97,7 @@ public class TaskController {
             @ApiResponse(
                     responseCode = "400", description = "Invalid data entered.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDto.class)))    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
@@ -113,7 +114,7 @@ public class TaskController {
             @ApiResponse(
                     responseCode = "404", description = "Task not found",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDto.class)))  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @GetMapping("/{id}")
     public ResponseEntity<TaskDto> findTaskById(@Parameter(description = "Task Id") @PathVariable Long id) {
@@ -126,7 +127,7 @@ public class TaskController {
             @ApiResponse(
                     responseCode = "200", description = "Success. The tasks has been returned.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PageDto.class))),   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            schema = @Schema(implementation = PageDto.class))),
     })
     @GetMapping
     public ResponseEntity<PageDto<TaskDto>> findAllTasks(@RequestParam(defaultValue = "0") int page,
