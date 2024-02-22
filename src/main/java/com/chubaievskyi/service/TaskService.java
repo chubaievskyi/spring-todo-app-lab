@@ -1,7 +1,6 @@
 package com.chubaievskyi.service;
 
 import com.chubaievskyi.dto.TaskDto;
-import com.chubaievskyi.dto.UserDto;
 import com.chubaievskyi.entity.Status;
 import com.chubaievskyi.entity.TaskEntity;
 import com.chubaievskyi.exception.TaskNotFoundException;
@@ -25,14 +24,11 @@ import java.util.Optional;
 public class TaskService {
 
     final TaskRepository taskRepository;
-    final UserService userService;
 
     public TaskDto createTask(TaskDto taskDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserDto userDto = userService.findUserByEmail(taskDto.getOwner());
         taskDto.setCreatedBy(username);
         taskDto.setCreatedAt(LocalDateTime.now());
-        taskDto.setOwner(String.valueOf(userDto.getId()));
         taskDto.setStatus(String.valueOf(Status.NEW));
         TaskEntity taskEntity = TaskMapper.MAPPER.dtoToEntity(taskDto);
         TaskEntity savedTask = taskRepository.save(taskEntity);
@@ -42,11 +38,10 @@ public class TaskService {
     public TaskDto updateTask(Long id, TaskDto taskDto) {
         Optional<TaskEntity> optionalTaskEntity = taskRepository.findById(id);
         if (optionalTaskEntity.isPresent()) {
-            UserDto userDto = userService.findUserByEmail(taskDto.getOwner());
             TaskEntity taskEntity = optionalTaskEntity.get();
             taskEntity.setName(taskDto.getName());
             taskEntity.setDescription(taskDto.getDescription());
-            taskEntity.setOwner(userDto.getId());
+            taskEntity.setOwner(taskDto.getOwner());
             taskEntity.setDeadline(LocalDate.parse(taskDto.getDeadline()));
             TaskEntity updatedTask = taskRepository.save(taskEntity);
             return TaskMapper.MAPPER.entityToDto(updatedTask);
@@ -55,11 +50,11 @@ public class TaskService {
         }
     }
 
-    public TaskDto updateTaskStatus(Long id, String status) { //////!!!!!!!!!! на які статуси можна!!!!
+    public TaskDto updateTaskStatus(Long id, Status status) { //////!!!!!!!!!! на які статуси можна!!!!
         Optional<TaskEntity> optionalTaskEntity = taskRepository.findById(id);
         if (optionalTaskEntity.isPresent()) {
             TaskEntity taskEntity = optionalTaskEntity.get();
-            taskEntity.setStatus(Status.valueOf(status));
+            taskEntity.setStatus(status);
             TaskEntity updatedTask = taskRepository.save(taskEntity);
             return TaskMapper.MAPPER.entityToDto(updatedTask);
         } else {
@@ -79,10 +74,7 @@ public class TaskService {
     public TaskDto findTaskById(Long id) {
         Optional<TaskEntity> optionalTaskEntity = taskRepository.findById(id);
         if (optionalTaskEntity.isPresent()) {
-            UserDto userDto = userService.findUserById(optionalTaskEntity.get().getOwner());
-            TaskDto taskDto = TaskMapper.MAPPER.entityToDto(optionalTaskEntity.get());
-            taskDto.setOwner(userDto.getEmail());
-            return taskDto;
+            return TaskMapper.MAPPER.entityToDto(optionalTaskEntity.get());
         } else {
             throw new TaskNotFoundException(id);
         }
