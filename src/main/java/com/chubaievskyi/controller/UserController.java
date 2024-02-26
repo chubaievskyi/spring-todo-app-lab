@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = {})
 @SecurityRequirement(name = "todo-app")
+@Tag(name = "Users")
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
@@ -67,6 +69,48 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
         UserDto updatedUser = userService.updateUser(id, userDto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+//    @Operation(summary = "Update password by user email.", description = "Update password.")
+//    @ApiResponses(value = {
+//            @ApiResponse(
+//                    responseCode = "204", description = "Password successfully updated.",
+//                    content = @Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = UserDto.class))),
+//            @ApiResponse(
+//                    responseCode = "400", description = "Invalid data entered.",
+//                    content = @Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = ErrorResponseDto.class))),
+//            @ApiResponse(
+//                    responseCode = "404", description = "User not found.",
+//                    content = @Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = ErrorResponseDto.class)))
+//    })
+//    @PutMapping("/update/{email}")
+//    public ResponseEntity<UserDto> updateUserPassword(@PathVariable String email, @Valid @RequestBody String password) {
+//        UserDto updatedUserPasswordDto = userService.updateUserPassword(email, password);
+//        return new ResponseEntity<>(updatedUserPasswordDto, HttpStatus.OK);
+//    }
+
+    @Operation(summary = "Update password by user email.", description = "Update password.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204", description = "Password successfully updated.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserDto.class))),
+            @ApiResponse(
+                    responseCode = "400", description = "Invalid data entered.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(
+                    responseCode = "404", description = "User not found.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @PutMapping("/update/{email}{currentPassword}{newPassword}")
+    public ResponseEntity<UserDto> updateOwnUserPassword(@PathVariable String email, @PathVariable String currentPassword, @PathVariable String newPassword) {
+        UserDto updatedUserPasswordDto = userService.updateOwnUserPassword(email, currentPassword, newPassword);
+        return new ResponseEntity<>(updatedUserPasswordDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Delete user by ID.", description = "Delete user from database.")
