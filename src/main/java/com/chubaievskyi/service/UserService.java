@@ -2,6 +2,7 @@ package com.chubaievskyi.service;
 
 import com.chubaievskyi.dto.UserDto;
 import com.chubaievskyi.entity.UserEntity;
+import com.chubaievskyi.exception.InvalidPasswordException;
 import com.chubaievskyi.exception.UserNotFoundException;
 import com.chubaievskyi.mapper.UserMapper;
 import com.chubaievskyi.repository.UserRepository;
@@ -32,6 +33,7 @@ public class UserService {
         return UserMapper.MAPPER.entityToDto(savedUser);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserDto updateUser(Long id, UserDto userDto) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
         if (optionalUserEntity.isPresent()) {
@@ -42,6 +44,35 @@ public class UserService {
             return UserMapper.MAPPER.entityToDto(updatedUser);
         } else {
             throw new UserNotFoundException(id);
+        }
+    }
+
+//    public UserDto updateUserPassword(String email, String password) {
+//        Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
+//        if (optionalUserEntity.isPresent()) {
+//            UserEntity userEntity = optionalUserEntity.get();
+////            userEntity.setId(optionalUserEntity.get().getId());
+//            userEntity.setPassword(passwordEncoder.encode(password));
+//            UserEntity updatedUserPassword = userRepository.save(userEntity);
+//            return UserMapper.MAPPER.entityToDto(updatedUserPassword);
+//        } else {
+//            throw new UserNotFoundException(email);
+//        }
+//    }
+
+    public UserDto updateOwnUserPassword(String email, String currentPassword, String newPassword) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
+        if (optionalUserEntity.isPresent()) {
+            UserEntity userEntity = optionalUserEntity.get();
+            if (userEntity.getPassword().equals(currentPassword)) {
+//            userEntity.setId(optionalUserEntity.get().getId());
+                userEntity.setPassword(passwordEncoder.encode(newPassword));
+                UserEntity updatedUserPassword = userRepository.save(userEntity);
+                return UserMapper.MAPPER.entityToDto(updatedUserPassword);
+            }
+            throw new InvalidPasswordException(currentPassword);
+        } else {
+            throw new UserNotFoundException(email);
         }
     }
 

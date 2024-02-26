@@ -30,8 +30,10 @@ public class SecurityConfiguration {
                                 .requestMatchers("/users/**", "/tasks", "/tasks/**").hasAnyAuthority(ROLE_ADMIN, ROLE_USER)
                                 .anyRequest().authenticated()
                 )
+
                 .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN))
+//                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN))
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 )
                 .httpBasic(Customizer.withDefaults()
                 );
