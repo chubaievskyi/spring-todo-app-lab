@@ -71,27 +71,6 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-//    @Operation(summary = "Update password by user email.", description = "Update password.")
-//    @ApiResponses(value = {
-//            @ApiResponse(
-//                    responseCode = "204", description = "Password successfully updated.",
-//                    content = @Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = UserDto.class))),
-//            @ApiResponse(
-//                    responseCode = "400", description = "Invalid data entered.",
-//                    content = @Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = ErrorResponseDto.class))),
-//            @ApiResponse(
-//                    responseCode = "404", description = "User not found.",
-//                    content = @Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = ErrorResponseDto.class)))
-//    })
-//    @PutMapping("/update/{email}")
-//    public ResponseEntity<UserDto> updateUserPassword(@PathVariable String email, @Valid @RequestBody String password) {
-//        UserDto updatedUserPasswordDto = userService.updateUserPassword(email, password);
-//        return new ResponseEntity<>(updatedUserPasswordDto, HttpStatus.OK);
-//    }
-
     @Operation(summary = "Update password by user email.", description = "Update password.")
     @ApiResponses(value = {
             @ApiResponse(
@@ -107,8 +86,8 @@ public class UserController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @PutMapping("/update/{email}{currentPassword}{newPassword}")
-    public ResponseEntity<UserDto> updateOwnUserPassword(@PathVariable String email, @PathVariable String currentPassword, @PathVariable String newPassword) {
+    @PutMapping("/updatePassword/{email}")
+    public ResponseEntity<UserDto> updateOwnUserPassword(@PathVariable String email, String currentPassword, String newPassword) {
         UserDto updatedUserPasswordDto = userService.updateOwnUserPassword(email, currentPassword, newPassword);
         return new ResponseEntity<>(updatedUserPasswordDto, HttpStatus.OK);
     }

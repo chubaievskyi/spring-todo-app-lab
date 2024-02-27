@@ -47,25 +47,11 @@ public class UserService {
         }
     }
 
-//    public UserDto updateUserPassword(String email, String password) {
-//        Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
-//        if (optionalUserEntity.isPresent()) {
-//            UserEntity userEntity = optionalUserEntity.get();
-////            userEntity.setId(optionalUserEntity.get().getId());
-//            userEntity.setPassword(passwordEncoder.encode(password));
-//            UserEntity updatedUserPassword = userRepository.save(userEntity);
-//            return UserMapper.MAPPER.entityToDto(updatedUserPassword);
-//        } else {
-//            throw new UserNotFoundException(email);
-//        }
-//    }
-
     public UserDto updateOwnUserPassword(String email, String currentPassword, String newPassword) {
         Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
         if (optionalUserEntity.isPresent()) {
             UserEntity userEntity = optionalUserEntity.get();
-            if (userEntity.getPassword().equals(currentPassword)) {
-//            userEntity.setId(optionalUserEntity.get().getId());
+            if (passwordEncoder.matches(currentPassword, userEntity.getPassword())) {
                 userEntity.setPassword(passwordEncoder.encode(newPassword));
                 UserEntity updatedUserPassword = userRepository.save(userEntity);
                 return UserMapper.MAPPER.entityToDto(updatedUserPassword);
