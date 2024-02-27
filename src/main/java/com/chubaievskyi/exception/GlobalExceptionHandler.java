@@ -45,4 +45,17 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = InvalidPasswordException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidPasswordException(RuntimeException e) {
+        String message = "Incorrect password entered: ";
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")),
+                HttpStatus.BAD_REQUEST.value(),
+                "BAD REQUEST",
+                message);
+
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+    }
 }
