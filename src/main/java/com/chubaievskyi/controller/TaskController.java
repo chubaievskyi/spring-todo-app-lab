@@ -3,6 +3,7 @@ package com.chubaievskyi.controller;
 import com.chubaievskyi.dto.ErrorResponseDto;
 import com.chubaievskyi.dto.PageDto;
 import com.chubaievskyi.dto.TaskDto;
+import com.chubaievskyi.entity.Event;
 import com.chubaievskyi.entity.Status;
 import com.chubaievskyi.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -88,7 +89,7 @@ public class TaskController {
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PutMapping("/status/{id}")
-    public ResponseEntity<TaskDto> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody Status status) {
+    public ResponseEntity<TaskDto> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody Event status) {
         TaskDto updatedTaskStatus = taskService.updateTaskStatus(id, status);
         return new ResponseEntity<>(updatedTaskStatus, HttpStatus.OK);
     }

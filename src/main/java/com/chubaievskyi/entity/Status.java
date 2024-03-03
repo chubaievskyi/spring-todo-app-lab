@@ -10,5 +10,7 @@ public enum Status {
     NOTIFIED,
     SIGNED,
 
-    DONE
+    DONE,
+
+    CANCELLED
 }
