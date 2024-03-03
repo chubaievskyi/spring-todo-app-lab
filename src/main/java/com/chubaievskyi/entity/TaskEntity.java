@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.statemachine.annotation.WithStateMachine;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+//@WithStateMachine
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

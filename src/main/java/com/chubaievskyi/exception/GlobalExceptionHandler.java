@@ -58,4 +58,30 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(RuntimeException e) {
+        String message = "Incorrect status entered: ";
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")),
+                HttpStatus.NOT_FOUND.value(),
+                "Not found",
+                message);
+
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = IllegalStateException.class)
+    public ResponseEntity<ErrorResponseDto> handleIllegalStateException(RuntimeException e) {
+        String message = "Invalid status transition";
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")),
+                HttpStatus.NOT_FOUND.value(),
+                "BAD REQUEST",
+                message);
+
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+    }
 }
