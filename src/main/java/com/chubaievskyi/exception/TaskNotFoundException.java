@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class TaskNotFoundException extends RuntimeException {
 
     public TaskNotFoundException(Long id) {
-        super("Task not found with ID: " + id);
+        super("app.task.not.found.id" + id);
     }
 }

@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class InvalidStatusException extends IllegalStateException {
 
     public InvalidStatusException(Event status) {
-        super("It is not possible to change the status to " + status);
+        super("app.status.invalid" + status);
     }
 }
