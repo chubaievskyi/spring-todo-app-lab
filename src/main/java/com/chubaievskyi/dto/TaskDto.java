@@ -35,12 +35,12 @@ public class TaskDto {
 
     @Schema(description = "Task name", example = "Task 1")
     @NotBlank
-    @Size(min = 3, max = 100, message = "The task must contain between 3 and 100 characters")
+    @Size(min = 3, max = 100, message = "app.task.name.invalid.size")
     String name;
 
     @Schema(description = "Description", example = "Do something")
     @NotBlank
-    @Size(min = 3, max = 100, message = "The description must contain between 3 and 100 characters")
+    @Size(min = 3, max = 100, message = "app.task.description.invalid.size")
     String description;
 
     @Schema(description = "User name", example = "user1@gmail.com")

@@ -16,12 +16,14 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String DATE_TIME_FORMAT = "HH:mm:ss dd.MM.yyyy";
+
     @ExceptionHandler(value = {UserNotFoundException.class, TaskNotFoundException.class})
     public ResponseEntity<ErrorResponseDto> handleNotFoundException(RuntimeException e) {
         String message = e instanceof UserNotFoundException ? "User not found" : "Task not found";
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.NOT_FOUND.value(),
                 "Not found",
                 message);
@@ -38,7 +40,7 @@ public class GlobalExceptionHandler {
         }
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 validationErrors.toString());
@@ -51,7 +53,7 @@ public class GlobalExceptionHandler {
         String message = "Incorrect password entered: ";
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.BAD_REQUEST.value(),
                 "BAD REQUEST",
                 message);
@@ -64,7 +66,7 @@ public class GlobalExceptionHandler {
         String message = "Incorrect status entered: ";
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.NOT_FOUND.value(),
                 "Not found",
                 message);
@@ -77,7 +79,7 @@ public class GlobalExceptionHandler {
         String message = "Invalid status transition";
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.NOT_FOUND.value(),
                 "BAD REQUEST",
                 message);

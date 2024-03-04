@@ -25,19 +25,19 @@ public class UserDto {
 
     @Schema(description = "User password", example = "123")
     @NotBlank
-    @Size(min = 3, max = 100, message = "The password must contain between 3 and 100 characters")
+    @Size(min = 3, max = 100, message = "app.password.invalid.size")
     String password;
 
     @Schema(description = "User first name", example = "Rod")
     @NotBlank
-    @Size(min = 2, max = 100, message = "The first name must contain between 2 and 100 characters")
-    @Pattern(regexp = "^[a-zA-Zа-яА-ЯґҐєЄіІїЇ]*$", message = "First name should contain only Ukrainian or English letters.")
+    @Size(min = 2, max = 100, message = "app.first.name.invalid.size")
+    @Pattern(regexp = "^[a-zA-Zа-яА-ЯґҐєЄіІїЇ]*$", message = "app.first.name.invalid.pattern")
     String firstName;
 
     @Schema(description = "User last name", example = "Johnson")
     @NotBlank
-    @Size(min = 2, max = 100, message = "The last name must contain between 2 and 100 characters")
-    @Pattern(regexp = "^[a-zA-Zа-яА-ЯґҐєЄіІїЇ]*$", message = "Last name should contain only Ukrainian or English letters.")
+    @Size(min = 2, max = 100, message = "app.last.name.invalid.size")
+    @Pattern(regexp = "^[a-zA-Zа-яА-ЯґҐєЄіІїЇ]*$", message = "app.last.name.invalid.pattern")
     String lastName;
 
     @Schema(description = "User role", example = "ADMIN")
