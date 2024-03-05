@@ -1,6 +1,8 @@
 package com.chubaievskyi.exception;
 
 import com.chubaievskyi.dto.ErrorResponseDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,20 +14,30 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @ControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
     private static final String DATE_TIME_FORMAT = "HH:mm:ss dd.MM.yyyy";
+    private final MessageSource messageSource;
 
     @ExceptionHandler(value = {UserNotFoundException.class, TaskNotFoundException.class})
-    public ResponseEntity<ErrorResponseDto> handleNotFoundException(RuntimeException e) {
-        String message = e instanceof UserNotFoundException ? "User not found" : "Task not found";
+    public ResponseEntity<ErrorResponseDto> handleNotFoundException(RuntimeException e, Locale locale) {
+//        String message = e instanceof UserNotFoundException ? "app.user.not.found" : "app.task.not.found";
+
+//        String messageCode = e instanceof UserNotFoundException ? "app.user.not.found" : "app.task.not.found";
+//        MessageSource messageSource = applicationContext.getBean(MessageSource.class);
+//        String message = messageSource.getMessage(messageCode, null, locale);
+
+        String messageKey = e instanceof UserNotFoundException ? "app.user.not.found" : "app.task.not.found";
+        String message = messageSource.getMessage(messageKey, null, locale);
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.NOT_FOUND.value(),
-                "Not found",
+                messageSource.getMessage("app.not.found", null, locale),
                 message);
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
@@ -50,7 +62,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = InvalidPasswordException.class)
     public ResponseEntity<ErrorResponseDto> handleInvalidPasswordException(RuntimeException e) {
-        String message = "Incorrect password entered: ";
+        String message = "app.incorrect.password";
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
@@ -63,12 +75,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = IllegalArgumentException.class)
     public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(RuntimeException e) {
-        String message = "Incorrect status entered: ";
+        String message = "app.incorrect.status";
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.NOT_FOUND.value(),
-                "Not found",
+                "app.not.found",
                 message);
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
