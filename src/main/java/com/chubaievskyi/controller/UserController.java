@@ -6,6 +6,7 @@ import com.chubaievskyi.dto.UserDto;
 import com.chubaievskyi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Locale;
 
 @RestController
 @CrossOrigin(origins = {})
@@ -106,7 +109,18 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Get user by ID.", description = "Returns user by id")
+    @Operation(summary = "Get user by ID.", description = "Returns user by id",
+            parameters = {
+                    @Parameter(
+                            name = "Accept-Language",
+                            in = ParameterIn.HEADER,
+                            description = "Мова (uk), Language(en), Sprache(de)",
+                            required = false,
+                            schema = @Schema(type = "string"),
+                            example = "en"
+                    )
+            }
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200", description = "Success. The user has been returned.",
@@ -117,8 +131,11 @@ public class UserController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     })
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "Accept-Language", value = "Language", dataType = "string", paramType = "header")
+//    })
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findUserById(@Parameter(description = "User Id") @PathVariable Long id) {
+    public ResponseEntity<UserDto> findUserById(@Parameter(description = "User Id") @PathVariable Long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         UserDto userDto = userService.findUserById(id);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
