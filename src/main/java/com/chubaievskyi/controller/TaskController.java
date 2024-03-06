@@ -4,7 +4,6 @@ import com.chubaievskyi.dto.ErrorResponseDto;
 import com.chubaievskyi.dto.PageDto;
 import com.chubaievskyi.dto.TaskDto;
 import com.chubaievskyi.entity.Event;
-import com.chubaievskyi.entity.Status;
 import com.chubaievskyi.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,6 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Locale;
+
 @RestController
 @CrossOrigin(origins = {})
 @SecurityRequirement(name = "todo-app")
@@ -34,7 +35,8 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @Operation(summary = "Create a task.", description = "Creating and adding a new task to the database.")
+    @Operation(summary = "Create a task.", description = "Creating and adding a new task to the database.",
+            parameters = @Parameter(ref = "#/components/parameters/Accept-Language"))
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201", description = "Task successfully created.",
@@ -46,13 +48,15 @@ public class TaskController {
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping
-    public ResponseEntity<TaskDto> createTask(@Valid @RequestBody TaskDto taskDto) {
+    public ResponseEntity<TaskDto> createTask(@Valid @RequestBody TaskDto taskDto,
+                                              @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         TaskDto createdTask = taskService.createTask(taskDto);
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
 
 
-    @Operation(summary = "Update task by ID.", description = "Update task data.")
+    @Operation(summary = "Update task by ID.", description = "Update task data.",
+            parameters = @Parameter(ref = "#/components/parameters/Accept-Language"))
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204", description = "Task successfully updated.",
@@ -68,12 +72,14 @@ public class TaskController {
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto) {
+    public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto,
+                                              @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         TaskDto updatedTask = taskService.updateTask(id, taskDto);
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
 
-    @Operation(summary = "Update task status by ID.", description = "Update task status.")
+    @Operation(summary = "Update task status by ID.", description = "Update task status.",
+            parameters = @Parameter(ref = "#/components/parameters/Accept-Language"))
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204", description = "Task status successfully updated.",
@@ -89,12 +95,14 @@ public class TaskController {
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PutMapping("/status/{id}")
-    public ResponseEntity<TaskDto> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody Event status) {
+    public ResponseEntity<TaskDto> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody Event status,
+                                                    @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         TaskDto updatedTaskStatus = taskService.updateTaskStatus(id, status);
         return new ResponseEntity<>(updatedTaskStatus, HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete task by ID.", description = "Delete task from database.")
+    @Operation(summary = "Delete task by ID.", description = "Delete task from database.",
+            parameters = @Parameter(ref = "#/components/parameters/Accept-Language"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Task successfully deleted.", content = @Content),
             @ApiResponse(
@@ -103,12 +111,14 @@ public class TaskController {
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id,
+                                           @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         taskService.deleteTask(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Get task by ID.", description = "Returns task by id")
+    @Operation(summary = "Get task by ID.", description = "Returns task by id",
+            parameters = @Parameter(ref = "#/components/parameters/Accept-Language"))
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200", description = "Success. The task has been returned.",
@@ -120,12 +130,14 @@ public class TaskController {
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDto> findTaskById(@Parameter(description = "Task Id") @PathVariable Long id) {
+    public ResponseEntity<TaskDto> findTaskById(@Parameter(description = "Task Id") @PathVariable Long id,
+                                                @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         TaskDto taskDto = taskService.findTaskById(id);
         return new ResponseEntity<>(taskDto, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all tasks.", description = "Returns all tasks")
+    @Operation(summary = "Get all tasks.", description = "Returns all tasks",
+            parameters = @Parameter(ref = "#/components/parameters/Accept-Language"))
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200", description = "Success. The tasks has been returned.",
@@ -134,7 +146,8 @@ public class TaskController {
     })
     @GetMapping
     public ResponseEntity<PageDto<TaskDto>> findAllTasks(@RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "10") int size) {
+                                                         @RequestParam(defaultValue = "10") int size,
+                                                         @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
         Page<TaskDto> taskDtoPage = taskService.findAllTasks(pageable);
         PageDto<TaskDto> response = new PageDto<>(taskDtoPage.getContent(), page, taskDtoPage.getTotalPages());

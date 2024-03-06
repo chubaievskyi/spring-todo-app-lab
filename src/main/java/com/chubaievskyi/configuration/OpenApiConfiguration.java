@@ -5,6 +5,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
@@ -15,6 +17,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.Constants.STRING;
 
 @Configuration
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -55,13 +59,26 @@ public class OpenApiConfiguration {
                 .addSecurityItem(new SecurityRequirement())
                 .components(
                         new Components()
-                        .addSecuritySchemes("todo-app",
-                                new SecurityScheme().name("todo-app")
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("basic")
-                                        .in(SecurityScheme.In.HEADER)
+                                .addSecuritySchemes("todo-app",
+                                        new SecurityScheme().name("todo-app")
+                                                .type(SecurityScheme.Type.HTTP)
+                                                .scheme("basic")
+                                                .in(SecurityScheme.In.HEADER)
 
                                 )
+                                .addParameters("Accept-Language",
+                                        new Parameter()
+                                                .name("Accept-Language")
+                                                .in("header")
+                                                .description("Language (uk), Language(en), Sprache(de)")
+                                                .required(false)
+                                                .schema(new Schema<String>()
+                                                        .type(STRING)
+                                                        .example("en")
+                                                )
+                                                .example("en")
+                                )
+
                 );
     }
 }

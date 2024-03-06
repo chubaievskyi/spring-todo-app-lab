@@ -25,13 +25,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {UserNotFoundException.class, TaskNotFoundException.class})
     public ResponseEntity<ErrorResponseDto> handleNotFoundException(RuntimeException e, Locale locale) {
-//        String message = e instanceof UserNotFoundException ? "app.user.not.found" : "app.task.not.found";
 
-//        String messageCode = e instanceof UserNotFoundException ? "app.user.not.found" : "app.task.not.found";
-//        MessageSource messageSource = applicationContext.getBean(MessageSource.class);
-//        String message = messageSource.getMessage(messageCode, null, locale);
-
-        String messageKey = e instanceof UserNotFoundException ? "app.user.not.found" : "app.task.not.found";
+        String messageKey = e instanceof UserNotFoundException ? "app.user.not.found": "app.task.not.found";
         String message = messageSource.getMessage(messageKey, null, locale);
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
