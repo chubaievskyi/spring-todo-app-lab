@@ -19,19 +19,17 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-//        if (request.getUserPrincipal() != null) {
-//            return;
-//        }
 
         ObjectMapper mapper = new ObjectMapper();
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")),
                 HttpStatus.FORBIDDEN.value(),
                 "FORBIDDEN",
-                "Не достатньо прав/не авторизовано");
+                "Not authorized.");
 
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType("application/json");
         mapper.writeValue(response.getOutputStream(), errorResponseDto);
     }
 }
+

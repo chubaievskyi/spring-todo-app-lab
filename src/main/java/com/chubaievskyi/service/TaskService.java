@@ -4,24 +4,16 @@ import com.chubaievskyi.dto.TaskDto;
 import com.chubaievskyi.entity.Event;
 import com.chubaievskyi.entity.Status;
 import com.chubaievskyi.entity.TaskEntity;
-import com.chubaievskyi.exception.InvalidPasswordException;
 import com.chubaievskyi.exception.InvalidStatusException;
 import com.chubaievskyi.exception.TaskNotFoundException;
 import com.chubaievskyi.mapper.TaskMapper;
 import com.chubaievskyi.repository.TaskRepository;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.StateMachineException;
-import org.springframework.statemachine.access.StateMachineAccess;
-import org.springframework.statemachine.config.EnableStateMachine;
-import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-//@EnableStateMachine
 @Service
-//@AllArgsConstructor
-//@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TaskService {
 
@@ -43,7 +32,6 @@ public class TaskService {
         this.taskRepository = taskRepository;
         this.stateMachine = stateMachine;
     }
-
 
     public TaskDto createTask(TaskDto taskDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
