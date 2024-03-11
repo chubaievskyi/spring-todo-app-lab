@@ -70,7 +70,7 @@ public class OpenApiConfiguration {
                                         new Parameter()
                                                 .name("Accept-Language")
                                                 .in("header")
-                                                .description("Language (uk), Language(en), Sprache(de)")
+                                                .description("Мова (uk), Language(en), Sprache(de)")
                                                 .required(false)
                                                 .schema(new Schema<String>()
                                                         .type(STRING)

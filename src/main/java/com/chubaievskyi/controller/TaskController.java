@@ -4,7 +4,9 @@ import com.chubaievskyi.dto.ErrorResponseDto;
 import com.chubaievskyi.dto.PageDto;
 import com.chubaievskyi.dto.TaskDto;
 import com.chubaievskyi.entity.Event;
+import com.chubaievskyi.entity.Status;
 import com.chubaievskyi.service.TaskService;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = {})
@@ -49,7 +52,7 @@ public class TaskController {
     })
     @PostMapping
     public ResponseEntity<TaskDto> createTask(@Valid @RequestBody TaskDto taskDto,
-                                              @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                              @RequestHeader(name = "Accept-Language") Locale locale) {
         TaskDto createdTask = taskService.createTask(taskDto);
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
@@ -73,7 +76,7 @@ public class TaskController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto,
-                                              @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                              @RequestHeader(name = "Accept-Language") Locale locale) {
         TaskDto updatedTask = taskService.updateTask(id, taskDto);
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
@@ -95,8 +98,8 @@ public class TaskController {
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PutMapping("/status/{id}")
-    public ResponseEntity<TaskDto> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody Event status,
-                                                    @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public ResponseEntity<TaskDto> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody String status,
+                                                    @RequestHeader(name = "Accept-Language") Locale locale) {
         TaskDto updatedTaskStatus = taskService.updateTaskStatus(id, status);
         return new ResponseEntity<>(updatedTaskStatus, HttpStatus.OK);
     }
@@ -112,7 +115,7 @@ public class TaskController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id,
-                                           @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                           @RequestHeader(name = "Accept-Language") Locale locale) {
         taskService.deleteTask(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -131,7 +134,7 @@ public class TaskController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<TaskDto> findTaskById(@Parameter(description = "Task Id") @PathVariable Long id,
-                                                @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                @RequestHeader(name = "Accept-Language") Locale locale) {
         TaskDto taskDto = taskService.findTaskById(id);
         return new ResponseEntity<>(taskDto, HttpStatus.OK);
     }
@@ -147,7 +150,7 @@ public class TaskController {
     @GetMapping
     public ResponseEntity<PageDto<TaskDto>> findAllTasks(@RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size,
-                                                         @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                         @RequestHeader(name = "Accept-Language") Locale locale) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
         Page<TaskDto> taskDtoPage = taskService.findAllTasks(pageable);
         PageDto<TaskDto> response = new PageDto<>(taskDtoPage.getContent(), page, taskDtoPage.getTotalPages());
