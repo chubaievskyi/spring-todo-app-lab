@@ -49,7 +49,7 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto,
-                                              @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                              @RequestHeader(name = "Accept-Language") Locale locale) {
         UserDto createdUser = userService.createUser(userDto);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
@@ -73,7 +73,7 @@ public class UserController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto,
-                                              @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                              @RequestHeader(name = "Accept-Language") Locale locale) {
         UserDto updatedUser = userService.updateUser(id, userDto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
@@ -97,7 +97,7 @@ public class UserController {
     @PutMapping("/updatePassword/{email}")
     public ResponseEntity<UserDto> updateOwnUserPassword(@PathVariable String email,
                                                          String currentPassword, String newPassword,
-                                                         @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                         @RequestHeader(name = "Accept-Language") Locale locale) {
         UserDto updatedUserPasswordDto = userService.updateOwnUserPassword(email, currentPassword, newPassword);
         return new ResponseEntity<>(updatedUserPasswordDto, HttpStatus.OK);
     }
@@ -113,7 +113,7 @@ public class UserController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id,
-                                           @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                           @RequestHeader(name = "Accept-Language") Locale locale) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -132,7 +132,8 @@ public class UserController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> findUserById(@Parameter(description = "User Id") @PathVariable Long id,
-                                                @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                @RequestHeader(name = "Accept-Language") Locale locale) {
+
         UserDto userDto = userService.findUserById(id);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
@@ -151,7 +152,7 @@ public class UserController {
     })
     @GetMapping("/by-email/{email}")
     public ResponseEntity<UserDto> findUserByEmail(@Parameter(description = "User email") @PathVariable String email,
-                                                   @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                   @RequestHeader(name = "Accept-Language") Locale locale) {
         UserDto userDto = userService.findUserByEmail(email);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
@@ -167,7 +168,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<PageDto<UserDto>> findAllUsers(@RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size,
-                                                         @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                         @RequestHeader(name = "Accept-Language") Locale locale) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("email").ascending());
         Page<UserDto> userDtoPage = userService.findAllUsers(pageable);
         PageDto<UserDto> response = new PageDto<>(userDtoPage.getContent(), page, userDtoPage.getTotalPages());

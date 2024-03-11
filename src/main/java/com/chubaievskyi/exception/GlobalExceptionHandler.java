@@ -26,14 +26,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {UserNotFoundException.class, TaskNotFoundException.class})
     public ResponseEntity<ErrorResponseDto> handleNotFoundException(RuntimeException e, Locale locale) {
 
-        String messageKey = e instanceof UserNotFoundException ? "app.user.not.found": "app.task.not.found";
+        String messageKey = e instanceof UserNotFoundException ? "app.user.not.found.id": "app.task.not.found.id";
         String message = messageSource.getMessage(messageKey, null, locale);
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.NOT_FOUND.value(),
                 messageSource.getMessage("app.not.found", null, locale),
-                message);
+                message + e.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
@@ -68,28 +68,41 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(RuntimeException e) {
-        String message = "app.incorrect.status";
+//    @ExceptionHandler(value = IllegalArgumentException.class)
+//    public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(RuntimeException e) {
+//        String message = "app.incorrect.status";
+//
+//        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+//                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
+//                HttpStatus.NOT_FOUND.value(),
+//                "app.not.found",
+//                message);
+//
+//        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+//    }
+
+    @ExceptionHandler(value = InvalidStatusException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidStatusException(RuntimeException e, Locale locale) {
+
+        String message = messageSource.getMessage("app.status.invalid", null, locale);
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
-                HttpStatus.NOT_FOUND.value(),
-                "app.not.found",
-                message);
+                HttpStatus.BAD_REQUEST.value(),
+                "BAD REQUEST",
+                message + e.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = IllegalStateException.class)
-    public ResponseEntity<ErrorResponseDto> handleIllegalStateException(RuntimeException e) {
-        String message = "Invalid status transition";
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<ErrorResponseDto> handleException(RuntimeException e) {
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
-                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 "BAD REQUEST",
-                message);
+                e.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }

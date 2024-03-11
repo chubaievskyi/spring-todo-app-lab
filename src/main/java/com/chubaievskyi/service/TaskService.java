@@ -58,8 +58,16 @@ public class TaskService {
         }
     }
 
-    public TaskDto updateTaskStatus(Long id, Event status) {
+    public TaskDto updateTaskStatus(Long id, String status) {
         Optional<TaskEntity> optionalTaskEntity = taskRepository.findById(id);
+
+        Event event;
+        try {
+            event = Event.valueOf(status);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidStatusException(status);
+        }
+
         if (optionalTaskEntity.isPresent()) {
             TaskEntity taskEntity = optionalTaskEntity.get();
             Status currentStatus = taskEntity.getStatus();
@@ -70,7 +78,7 @@ public class TaskService {
                     });
 
 //            boolean transitionPossible = stateMachine.sendEvent(status);
-            if (stateMachine.sendEvent(status)) {
+            if (stateMachine.sendEvent(event)) {
                 taskEntity.setStatus(stateMachine.getState().getId());
                 TaskEntity updatedTask = taskRepository.save(taskEntity);
                 return TaskMapper.MAPPER.entityToDto(updatedTask);

@@ -87,8 +87,6 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<Status
                 .withExternal()
                     .source(Status.SIGNED).target(Status.CANCELLED).event(Event.CANCEL)
                     .and();
-//                .withExternal()
-//                    .source(Status.CANCELLED).target(Status.NEW).event(Event.REOPEN);
     }
 
     @Bean
