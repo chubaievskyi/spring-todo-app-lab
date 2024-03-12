@@ -3,10 +3,7 @@ package com.chubaievskyi.controller;
 import com.chubaievskyi.dto.ErrorResponseDto;
 import com.chubaievskyi.dto.PageDto;
 import com.chubaievskyi.dto.TaskDto;
-import com.chubaievskyi.entity.Event;
-import com.chubaievskyi.entity.Status;
 import com.chubaievskyi.service.TaskService;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = {})

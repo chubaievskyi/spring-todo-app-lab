@@ -21,6 +21,7 @@ import java.util.Locale;
 public class GlobalExceptionHandler {
 
     private static final String DATE_TIME_FORMAT = "HH:mm:ss dd.MM.yyyy";
+    private static final String BAD_REQUEST = "BAD REQUEST";
     private final MessageSource messageSource;
 
     @ExceptionHandler(value = {UserNotFoundException.class, TaskNotFoundException.class})
@@ -56,30 +57,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = InvalidPasswordException.class)
-    public ResponseEntity<ErrorResponseDto> handleInvalidPasswordException(RuntimeException e) {
-        String message = "app.incorrect.password";
+    public ResponseEntity<ErrorResponseDto> handleInvalidPasswordException(RuntimeException e, Locale locale) {
+
+        String message = messageSource.getMessage("app.incorrect.password", null, locale);
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.BAD_REQUEST.value(),
-                "BAD REQUEST",
-                message);
+                BAD_REQUEST,
+                message + e.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
-
-//    @ExceptionHandler(value = IllegalArgumentException.class)
-//    public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(RuntimeException e) {
-//        String message = "app.incorrect.status";
-//
-//        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
-//                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
-//                HttpStatus.NOT_FOUND.value(),
-//                "app.not.found",
-//                message);
-//
-//        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
-//    }
 
     @ExceptionHandler(value = InvalidStatusException.class)
     public ResponseEntity<ErrorResponseDto> handleInvalidStatusException(RuntimeException e, Locale locale) {
@@ -89,7 +78,7 @@ public class GlobalExceptionHandler {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.BAD_REQUEST.value(),
-                "BAD REQUEST",
+                BAD_REQUEST,
                 message + e.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
@@ -101,7 +90,7 @@ public class GlobalExceptionHandler {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 HttpStatus.BAD_REQUEST.value(),
-                "BAD REQUEST",
+                BAD_REQUEST,
                 e.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
