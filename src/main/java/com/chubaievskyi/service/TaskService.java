@@ -63,7 +63,7 @@ public class TaskService {
 
         Event event;
         try {
-            event = Event.valueOf(status);
+            event = Event.valueOf(status.trim().replaceAll("^\"|\"$", ""));
         } catch (IllegalArgumentException e) {
             throw new InvalidStatusException(status);
         }
@@ -74,10 +74,10 @@ public class TaskService {
 
             stateMachine.getStateMachineAccessor()
                     .doWithAllRegions(accessor -> {
-                        accessor.resetStateMachine(new DefaultStateMachineContext<>(currentStatus, null, null, null));
+                        accessor.resetStateMachine(new DefaultStateMachineContext<>(currentStatus,
+                                null, null, null));
                     });
 
-//            boolean transitionPossible = stateMachine.sendEvent(status);
             if (stateMachine.sendEvent(event)) {
                 taskEntity.setStatus(stateMachine.getState().getId());
                 TaskEntity updatedTask = taskRepository.save(taskEntity);
