@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -40,12 +41,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDto> handleValidationException(MethodArgumentNotValidException e) {
+    public ResponseEntity<ErrorResponseDto> handleValidationException(MethodArgumentNotValidException e, Locale locale) {
+
+        String message = messageSource.getMessage("app.incorrect.password", null, locale);
 
         List<String> validationErrors = new ArrayList<>();
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            validationErrors.add(fieldError.getField() + ": " + fieldError.getDefaultMessage());
+//            validationErrors.add(fieldError.getField() + ": " + fieldError.getDefaultMessage());
+
+            validationErrors.add(fieldError.getField() + ": " + messageSource.getMessage(Objects.requireNonNull(fieldError.getDefaultMessage()), null, locale));
         }
+
+
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
