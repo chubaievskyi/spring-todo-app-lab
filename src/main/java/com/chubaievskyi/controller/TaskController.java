@@ -152,4 +152,23 @@ public class TaskController {
         PageDto<TaskDto> response = new PageDto<>(taskDtoPage.getContent(), page, taskDtoPage.getTotalPages());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @Operation(summary = "Get all tasks by user id.", description = "Returns all tasks by user",
+            parameters = @Parameter(ref = "#/components/parameters/Accept-Language"))
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "Success. The tasks has been returned.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = PageDto.class))),
+    })
+    @GetMapping("/user/{id}")
+    public ResponseEntity<PageDto<TaskDto>> findAllTasksByUserId(@Parameter(description = "User Id") @PathVariable Long id,
+                                                                 @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "10") int size,
+                                                         @RequestHeader(name = "Accept-Language") Locale locale) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("deadline").ascending());
+        Page<TaskDto> taskDtoPage = taskService.findAllTasksByUserId(pageable, id);
+        PageDto<TaskDto> response = new PageDto<>(taskDtoPage.getContent(), page, taskDtoPage.getTotalPages());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
