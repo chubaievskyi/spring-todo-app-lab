@@ -43,13 +43,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDto> handleValidationException(MethodArgumentNotValidException e, Locale locale) {
 
-        String message = messageSource.getMessage("app.incorrect.password", null, locale);
-
         List<String> validationErrors = new ArrayList<>();
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-//            validationErrors.add(fieldError.getField() + ": " + fieldError.getDefaultMessage());
-
-            validationErrors.add(fieldError.getField() + ": " + messageSource.getMessage(Objects.requireNonNull(fieldError.getDefaultMessage()), null, locale));
+            validationErrors.add(fieldError.getField() + ": " +
+                    messageSource.getMessage(Objects.requireNonNull(fieldError.getDefaultMessage()), null, locale));
         }
 
 
@@ -81,6 +78,20 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleInvalidStatusException(RuntimeException e, Locale locale) {
 
         String message = messageSource.getMessage("app.status.invalid", null, locale);
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
+                HttpStatus.BAD_REQUEST.value(),
+                BAD_REQUEST,
+                message + e.getMessage());
+
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = AccessTaskException.class)
+    public ResponseEntity<ErrorResponseDto> handleAccessTaskException(RuntimeException e, Locale locale) {
+
+        String message = messageSource.getMessage("app.task.access.denied", null, locale);
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
