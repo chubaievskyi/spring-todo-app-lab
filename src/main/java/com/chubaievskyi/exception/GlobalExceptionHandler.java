@@ -5,17 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -38,26 +33,6 @@ public class GlobalExceptionHandler {
                 message + e.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDto> handleValidationException(MethodArgumentNotValidException e, Locale locale) {
-
-        List<String> validationErrors = new ArrayList<>();
-        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            validationErrors.add(fieldError.getField() + ": " +
-                    messageSource.getMessage(Objects.requireNonNull(fieldError.getDefaultMessage()), null, locale));
-        }
-
-
-
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                validationErrors.toString());
-
-        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = InvalidPasswordException.class)
