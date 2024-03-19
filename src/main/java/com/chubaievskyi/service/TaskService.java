@@ -2,9 +2,11 @@ package com.chubaievskyi.service;
 
 import com.chubaievskyi.dto.TaskDto;
 import com.chubaievskyi.entity.*;
-import com.chubaievskyi.exception.*;
+import com.chubaievskyi.exception.AccessTaskException;
+import com.chubaievskyi.exception.InvalidStatusException;
+import com.chubaievskyi.exception.TaskNotFoundException;
+import com.chubaievskyi.exception.UserNotFoundException;
 import com.chubaievskyi.mapper.TaskMapper;
-import com.chubaievskyi.mapper.UserMapper;
 import com.chubaievskyi.repository.TaskRepository;
 import com.chubaievskyi.repository.UserRepository;
 import lombok.AccessLevel;
@@ -21,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
