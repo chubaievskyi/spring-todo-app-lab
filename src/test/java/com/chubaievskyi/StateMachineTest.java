@@ -3,14 +3,11 @@ package com.chubaievskyi;
 import com.chubaievskyi.configuration.StateMachineConfig;
 import com.chubaievskyi.entity.Event;
 import com.chubaievskyi.entity.Status;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.statemachine.test.StateMachineTestPlan;
 import org.springframework.statemachine.test.StateMachineTestPlanBuilder;
@@ -21,27 +18,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { StateMachineConfig.class})
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
-class StateMachineTests {
-
-//    @Autowired
-//    private StateMachineFactory<Status, Event> stateMachineFactory;
+class StateMachineTest {
 
     @Autowired
     private StateMachine<Status, Event> stateMachine;
-
-//    @BeforeEach
-//    public void setup() throws Exception {
-//        stateMachine = stateMachineFactory.getStateMachine();
-//        // plan don't know how to wait if machine is started
-//        // automatically so wait here.
-//        for (int i = 0; i < 10; i++) {
-//            if (stateMachine.getState() != null) {
-//                break;
-//            } else {
-//                Thread.sleep(200);
-//            }
-//        }
-//    }
 
     @Test
     void testInitial() throws Exception {
