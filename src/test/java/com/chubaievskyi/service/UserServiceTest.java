@@ -3,9 +3,12 @@ package com.chubaievskyi.service;
 import com.chubaievskyi.dto.UserDto;
 import com.chubaievskyi.entity.Role;
 import com.chubaievskyi.entity.UserEntity;
+import com.chubaievskyi.exception.InvalidPasswordException;
 import com.chubaievskyi.exception.UserNotFoundException;
 import com.chubaievskyi.mapper.UserMapper;
 import com.chubaievskyi.repository.UserRepository;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,33 +29,37 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Mock
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Mock
-    private UserMapper userMapper;
+    UserMapper userMapper;
 
     @Mock
-    private Pageable pageable;
+    Pageable pageable;
 
     @InjectMocks
-    private UserService userService;
+    UserService userService;
 
-    private UserDto userDto;
+    UserDto userDto;
 
-    private UserEntity userEntity;
+    UserEntity userEntity;
 
-    private Long userId;
+    Long userId;
+
+    String userEmail;
 
     @BeforeEach
     void SetUp() {
         userService = new UserService(userRepository, passwordEncoder);
         userId = 1L;
+        userEmail = "First@gmail.com";
 
         userDto = new UserDto(
                 1L,
@@ -76,6 +83,7 @@ class UserServiceTest {
     @Test
     void createUser() {
 
+        when(passwordEncoder.encode(any())).thenReturn("123");
         when(userRepository.save(userEntity)).thenReturn(userEntity);
 
         UserDto result = userService.createUser(userDto);
@@ -90,6 +98,7 @@ class UserServiceTest {
     void updateUser() {
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(userEntity));
+        when(passwordEncoder.encode(any())).thenReturn("123");
         when(userRepository.save(userEntity)).thenReturn(userEntity);
 
         UserDto result = userService.updateUser(userId, userDto);
@@ -170,5 +179,82 @@ class UserServiceTest {
 
         verify(userRepository, times(1)).findAll(pageable);
         assertEquals(Collections.emptyList(), result.getContent());
+    }
+
+    @Test
+    void findUserByEmail() {
+
+        when(userRepository.findByEmail(userEmail)).thenReturn(Optional.of(userEntity));
+
+        UserDto result = userService.findUserByEmail(userEmail);
+
+        assertNotNull(result);
+        assertEquals(userDto, result);
+
+        verify(userRepository).findByEmail(userEmail);
+    }
+
+    @Test
+    void findUserByEmailWhenUserNotFound() {
+
+        when(userRepository.findByEmail(userEmail)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.findUserByEmail(userEmail));
+
+        verify(userRepository).findByEmail(userEmail);
+        verify(userMapper, never()).entityToDto(any(UserEntity.class));
+    }
+
+    @Test
+    void updateOwnUserPassword() {
+        String currentPassword = "123";
+        String newPassword = "456";
+
+        when(userRepository.findByEmail(userEmail)).thenReturn(Optional.of(userEntity));
+        when(passwordEncoder.matches(currentPassword, userEntity.getPassword())).thenReturn(true);
+        when(passwordEncoder.encode(newPassword)).thenReturn(newPassword);
+        when(userRepository.save(userEntity)).thenReturn(userEntity);
+
+        UserDto result = userService.updateOwnUserPassword(userEmail, currentPassword, newPassword);
+
+        assertNotNull(result);
+        assertEquals(newPassword, result.getPassword());
+
+        verify(userRepository, times(1)).findByEmail(userEmail);
+        verify(passwordEncoder).encode(newPassword);
+        verify(userRepository).save(userEntity);
+    }
+
+    @Test
+    void updateOwnUserPasswordWhenUserNotFound() {
+        String email = "nonexistent@email.com";
+        String currentPassword = userDto.getPassword();
+        String newPassword = "456";
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.updateOwnUserPassword(email, currentPassword, newPassword));
+
+        verify(userRepository).findByEmail(email);
+        verify(passwordEncoder, never()).matches(any(), any());
+        verify(passwordEncoder, never()).encode(any());
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void updateOwnUserPasswordWhenInvalidPassword() {
+        String email = userDto.getEmail();
+        String currentPassword = "wrong_password";
+        String newPassword = "456";
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(userEntity));
+        when(passwordEncoder.matches(currentPassword, userEntity.getPassword())).thenReturn(false);
+
+        assertThrows(InvalidPasswordException.class, () -> userService.updateOwnUserPassword(email, currentPassword, newPassword));
+
+        verify(userRepository).findByEmail(email);
+        verify(passwordEncoder).matches(currentPassword, userEntity.getPassword());
+        verify(passwordEncoder, never()).encode(any());
+        verify(userRepository, never()).save(any());
     }
 }
