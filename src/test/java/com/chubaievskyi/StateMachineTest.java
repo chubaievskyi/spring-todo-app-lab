@@ -1,8 +1,8 @@
 package com.chubaievskyi;
 
 import com.chubaievskyi.configuration.StateMachineConfig;
-import com.chubaievskyi.entity.Event;
-import com.chubaievskyi.entity.Status;
+import com.chubaievskyi.enums.Event;
+import com.chubaievskyi.enums.Status;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

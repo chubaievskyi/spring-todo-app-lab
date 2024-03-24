@@ -2,6 +2,9 @@ package com.chubaievskyi.service;
 
 import com.chubaievskyi.dto.TaskDto;
 import com.chubaievskyi.entity.*;
+import com.chubaievskyi.enums.Event;
+import com.chubaievskyi.enums.Role;
+import com.chubaievskyi.enums.Status;
 import com.chubaievskyi.exception.TaskNotFoundException;
 import com.chubaievskyi.mapper.TaskMapper;
 import com.chubaievskyi.repository.TaskRepository;

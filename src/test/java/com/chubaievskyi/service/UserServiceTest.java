@@ -1,7 +1,7 @@
 package com.chubaievskyi.service;
 
 import com.chubaievskyi.dto.UserDto;
-import com.chubaievskyi.entity.Role;
+import com.chubaievskyi.enums.Role;
 import com.chubaievskyi.entity.UserEntity;
 import com.chubaievskyi.exception.InvalidPasswordException;
 import com.chubaievskyi.exception.UserNotFoundException;

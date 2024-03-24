@@ -1,6 +1,7 @@
-package com.chubaievskyi.exception;
+package com.chubaievskyi.configuration;
 
 import com.chubaievskyi.dto.ErrorResponseDto;
+import com.chubaievskyi.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;

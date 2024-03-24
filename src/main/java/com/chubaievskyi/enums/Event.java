@@ -1,4 +1,4 @@
-package com.chubaievskyi.entity;
+package com.chubaievskyi.enums;
 
 public enum Event {
 
