@@ -1,7 +1,7 @@
 package com.chubaievskyi.configuration;
 
-import com.chubaievskyi.entity.Event;
-import com.chubaievskyi.entity.Status;
+import com.chubaievskyi.enums.Event;
+import com.chubaievskyi.enums.Status;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
