@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.Constants.STRING;
-
 @Configuration
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OpenApiConfiguration {
@@ -73,7 +71,7 @@ public class OpenApiConfiguration {
                                                 .description("Мова (uk), Language(en), Sprache(de)")
                                                 .required(false)
                                                 .schema(new Schema<String>()
-                                                        .type(STRING)
+                                                        .type("string")
                                                         .example("en")
                                                 )
                                                 .example("en")
